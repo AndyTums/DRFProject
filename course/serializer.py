@@ -4,7 +4,7 @@ from course.models import Course, Lesson
 
 
 class CourseSerializer(ModelSerializer):
-    """ Serializer для модели COURSE """
+    """Serializer для модели COURSE"""
 
     class Meta:
         model = Course
@@ -12,7 +12,7 @@ class CourseSerializer(ModelSerializer):
 
 
 class LessonSerializer(ModelSerializer):
-    """ Serializer для модели COURSE """
+    """Serializer для модели COURSE"""
 
     class Meta:
         model = Lesson
