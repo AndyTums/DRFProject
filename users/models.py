@@ -1,5 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
+
+from course.models import Course, Lesson
 
 
 class User(AbstractUser):
@@ -33,3 +36,22 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class Payment(models.Model):
+    """Модель: Пользователь"""
+
+    METHOD_CHOICE = [('CASH', 'Наличные'),
+                     ('TRANSFER', 'Перевод')]
+
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now,
+                                max_length=30, blank=True, null=True, verbose_name="Дата и время оплаты")
+    course = models.ForeignKey(Course, blank=True, null=True, verbose_name="Оплаченный курс", on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, blank=True, null=True, verbose_name="Оплаченный урок", on_delete=models.CASCADE)
+
+    amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
+    method = models.CharField(default='TRANSFER', max_length=10, choices=METHOD_CHOICE, verbose_name="Метод оплаты")
+
+    def __str__(self):
+        return f'{self.user} - {self.course or self.lesson}'
