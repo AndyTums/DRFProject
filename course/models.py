@@ -10,6 +10,7 @@ class Course(models.Model):
     )
 
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
+    owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
 
     class Meta:
         verbose_name = "Курс"
@@ -25,13 +26,12 @@ class Lesson(models.Model):
     title = models.CharField(max_length=100, verbose_name="Название")
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
     image = models.ImageField(
-        upload_to="course/photo/", blank=True, null=True, verbose_name="Картинка"
-    )
+        upload_to="course/photo/", blank=True, null=True, verbose_name="Картинка")
 
     video = models.FileField(upload_to="course/video/", null=True, blank=True)
     course = models.ForeignKey(
-        Course, verbose_name="Курс", on_delete=models.SET_NULL, blank=True, null=True
-    )
+        Course, verbose_name="Курс", on_delete=models.SET_NULL, blank=True, null=True)
+    owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
 
     class Meta:
         verbose_name = "Урок"

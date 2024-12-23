@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from users.models import Payment, User
 from users.serializer import PaymentSerializer, UserSerializer
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserViewSet(ModelViewSet):
@@ -10,7 +11,14 @@ class UserViewSet(ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    # filterset_fields = ('date', )
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        """ Хэширование пароля при создании """
+
+        user = serializer.save(is_active=True)
+        user.set_password(user.password)
+        user.save()
 
 
 class PaymentViewSet(ModelViewSet):
@@ -21,7 +29,3 @@ class PaymentViewSet(ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['course', 'lesson', 'method']
     ordering_fields = ['date']
-
-    # filterset_fields = ('course', 'lesson', 'method',)
-    # filter_backends = [filters.OrderingFilter]
-    # ordering_fields = ('date', )
