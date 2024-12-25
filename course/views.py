@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from course.models import Course, Lesson
+from course.paginations import CustomPagination
 from course.serializer import CourseSerializer, LessonSerializer, CourseDetailSerializer
 from users.permissions import IsModer, IsOwner
 
@@ -15,6 +16,7 @@ class CourseViewSet(ModelViewSet):
     """ViewSet для модели COURSE"""
 
     queryset = Course.objects.all()
+    pagination_class = CustomPagination
 
     def get_serializer_class(self):
         """ Обработка запроса вывода списка всех курсов или детальное отображение одного """
@@ -87,3 +89,4 @@ class LessonListApiView(ListAPIView):
 
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    pagination_class = CustomPagination

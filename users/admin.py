@@ -1,13 +1,18 @@
 from django.contrib import admin
 
-from users.models import Payment, User
+from users.models import Payment, User, Subscription
 
 
 @admin.register(Payment)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date', 'user', 'amount', 'method', )
+    list_display = ('id', 'date', 'user', 'amount', 'method',)
 
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'email')
+
+
+@admin.register(Subscription)
+class UserAdmin(admin.ModelAdmin):
+    list_display = ('id', 'course', 'date')
