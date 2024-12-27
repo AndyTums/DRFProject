@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "django_filters",
+    'drf_yasg',
     "course",
     "users",
 ]
@@ -158,3 +159,5 @@ if CACHE_ENABLE:
             "LOCATION": "redis://127.0.0.1:6379/1",
         }
     }
+
+STRIPE_API_KEY = os.getenv('STRIPE_API_KEY')

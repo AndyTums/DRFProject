@@ -8,6 +8,8 @@ from users.models import Payment, User, Subscription
 from users.serializer import PaymentSerializer, UserSerializer, SubscriptionSerializer
 from rest_framework.permissions import IsAuthenticated
 
+from users.services import create_stripe_price, create_stripe_session
+
 
 class UserViewSet(ModelViewSet):
     """ViewSet для модели USER"""
@@ -32,6 +34,16 @@ class PaymentViewSet(ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['course', 'lesson', 'method']
     ordering_fields = ['date']
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        print(payment)
+        price = create_stripe_price(payment.amount)
+        print(price)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
 
 
 class SubscriptionViewSet(ModelViewSet):
