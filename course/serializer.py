@@ -1,11 +1,12 @@
+from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
 
 from course.models import Course, Lesson
+from course.validators import validate_youtube
 
 
 #     Работа с моделью COURSE
-class CourseSerializer(ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     """Serializer для модели COURSE"""
 
     class Meta:
@@ -13,8 +14,9 @@ class CourseSerializer(ModelSerializer):
         fields = "__all__"
 
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
     """Serializer для модели COURSE"""
+    video = serializers.CharField(validators=[validate_youtube], allow_blank=True)
 
     class Meta:
         model = Lesson
@@ -22,7 +24,7 @@ class LessonSerializer(ModelSerializer):
 
 
 #
-class CourseDetailSerializer(ModelSerializer):
+class CourseDetailSerializer(serializers.ModelSerializer):
     """ Отображение детальной информации по курсу + поле количество уроков в данном курсе """
 
     count_lessons = SerializerMethodField()

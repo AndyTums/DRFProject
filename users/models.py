@@ -55,3 +55,16 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.user} - {self.course or self.lesson}'
+
+
+class Subscription(models.Model):
+    """Модель: Подписки"""
+
+    user = models.ForeignKey(User, verbose_name="Пользователь", on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now,
+                                max_length=30, blank=True, null=True, verbose_name="Дата и время подписки")
+    course = models.ForeignKey(Course, blank=True, null=True, verbose_name="Подписанный курс",
+                               on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user} - {self.course or self.course}'
