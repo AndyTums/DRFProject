@@ -52,6 +52,8 @@ class Payment(models.Model):
 
     amount = models.PositiveIntegerField(verbose_name="Сумма оплаты")
     method = models.CharField(default='TRANSFER', max_length=10, choices=METHOD_CHOICE, verbose_name="Метод оплаты")
+    session_id = models.CharField(max_length=400, blank=True, null=True, verbose_name="ID сессии")
+    url = models.URLField(max_length=400, blank=True, null=True, verbose_name="Ссылка на сессию")
 
     def __str__(self):
         return f'{self.user} - {self.course or self.lesson}'

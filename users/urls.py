@@ -18,6 +18,7 @@ router.register("", UserViewSet, basename="user")
 urlpatterns = [
     path('login/', TokenObtainPairView.as_view(permission_classes=(AllowAny,)), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(permission_classes=(AllowAny,)), name='token_refresh'),
+
 ]
 
 urlpatterns += router.urls
