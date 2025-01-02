@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Course(models.Model):
@@ -11,6 +12,10 @@ class Course(models.Model):
 
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
     owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
+    created_at = models.DateTimeField(auto_now_add=True, max_length=30, blank=True, null=True,
+                                      verbose_name="Дата и время создание курса")
+    updated_at = models.DateTimeField(auto_now=True, max_length=30, blank=True, null=True,
+                                      verbose_name="Дата и время обновление курса")
 
     class Meta:
         verbose_name = "Курс"
@@ -32,6 +37,10 @@ class Lesson(models.Model):
     course = models.ForeignKey(
         Course, verbose_name="Курс", on_delete=models.SET_NULL, blank=True, null=True)
     owner = models.ForeignKey('users.User', on_delete=models.SET_NULL, blank=True, null=True, verbose_name="Владелец")
+    created_at = models.DateTimeField(auto_now_add=True, max_length=30, blank=True, null=True,
+                                      verbose_name="Дата и время создание урока")
+    updated_at = models.DateTimeField(auto_now=True, max_length=30, blank=True, null=True,
+                                      verbose_name="Дата и время обновление урока")
 
     class Meta:
         verbose_name = "Урок"

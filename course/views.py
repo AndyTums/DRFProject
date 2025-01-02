@@ -1,12 +1,18 @@
+from datetime import timedelta
+from time import strftime
+
+from django.utils import timezone
 from rest_framework.generics import (CreateAPIView, DestroyAPIView,
                                      ListAPIView, RetrieveAPIView,
                                      UpdateAPIView)
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from course.models import Course, Lesson
 from course.paginations import CustomPagination
 from course.serializer import CourseSerializer, LessonSerializer, CourseDetailSerializer
+from course.tasks import send_email
 from users.permissions import IsModer, IsOwner
 
 """ РАБОТА С МОДЕЛЬЮ COURSE """
@@ -42,6 +48,17 @@ class CourseViewSet(ModelViewSet):
         elif self.action == "destroy":
             self.permission_classes = (IsOwner | ~IsModer,)
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """ После успешного изменения модуля COURSE и если он не обновлялся более 4 часов - отправляем
+                                уведомление на почту всем подписчикам  """
+
+        course = serializer.save()
+        if timezone.now() - course.updated_at > timedelta(hours=4):
+            subs = [sub.user.email for sub in course.subscribes.all()]
+            send_email.delay(subs)
+        else:
+            print(f"Обновление было меньше чем 4 часа назад, отправки писем - не будет!")
 
 
 """ РАБОТА С МОДЕЛЬЮ LESSON """
