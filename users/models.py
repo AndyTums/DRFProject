@@ -66,7 +66,7 @@ class Subscription(models.Model):
     date = models.DateTimeField(default=timezone.now,
                                 max_length=30, blank=True, null=True, verbose_name="Дата и время подписки")
     course = models.ForeignKey(Course, blank=True, null=True, verbose_name="Подписанный курс",
-                               on_delete=models.CASCADE)
+                               on_delete=models.CASCADE,related_name="subscribes")
 
     def __str__(self):
         return f'{self.user} - {self.course or self.course}'
